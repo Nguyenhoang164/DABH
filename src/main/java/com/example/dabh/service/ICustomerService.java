@@ -1,4 +1,6 @@
 package com.example.dabh.service;
 
-public interface ICustomerService {
+import com.example.dabh.model.Customer;
+
+public interface ICustomerService extends IGenerateService<Customer> {
 }

@@ -1,4 +1,6 @@
 package com.example.dabh.service;
 
-public interface ICategoryService {
+import com.example.dabh.model.Category;
+
+public interface ICategoryService extends IGenerateService<Category> {
 }

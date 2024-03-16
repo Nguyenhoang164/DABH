@@ -5,13 +5,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Category {
+public class ProductDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String nameCategory;
+    private String size;
+    private String parameter;
     private String descripsion;
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private Users users;
+    @JoinColumn(name = "id_product")
+    private Product product;
 }

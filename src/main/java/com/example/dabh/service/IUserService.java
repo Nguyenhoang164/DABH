@@ -1,4 +1,10 @@
 package com.example.dabh.service;
 
-public interface IUserService {
+import com.example.dabh.model.Users;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
+
+public interface IUserService extends IGenerateService<Users> {
+    Optional<Users> findUserByName(String name);
 }

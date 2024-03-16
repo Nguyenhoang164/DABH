@@ -1,4 +1,6 @@
 package com.example.dabh.service;
 
-public interface IBillService {
+import com.example.dabh.model.Bill;
+
+public interface IBillService extends IGenerateService<Bill> {
 }
