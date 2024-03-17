@@ -44,7 +44,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void save(Product product, String name, String password, int idCategory) {
-        Optional<Users> usersOptional = userRepository.findUserByNameUserContaining(name);
+        Optional<Users> usersOptional = userRepository.findUserByNameUser(name);
         if (usersOptional.get().getPassword().equals(password)) {
             Iterable<Role> roles = roleRepository.findRoleByUsers(Collections.singleton(usersOptional.get()));
             for (Role role : roles) {
@@ -63,7 +63,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void delete(int id, String name, String password) {
-        Optional<Users> usersOptional = userRepository.findUserByNameUserContaining(name);
+        Optional<Users> usersOptional = userRepository.findUserByNameUser(name);
         if (usersOptional.get().getPassword().equals(password)) {
             Iterable<Role> roles = roleRepository.findRoleByUsers(Collections.singleton(usersOptional.get()));
             for (Role role : roles) {
@@ -79,7 +79,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void update(int id, Product product, String name, String password, int idCategory) {
-        Optional<Users> usersOptional = userRepository.findUserByNameUserContaining(name);
+        Optional<Users> usersOptional = userRepository.findUserByNameUser(name);
         if (usersOptional.get().getPassword().equals(password)) {
             Iterable<Role> roles = roleRepository.findRoleByUsers(Collections.singleton(usersOptional.get()));
             for (Role role : roles) {

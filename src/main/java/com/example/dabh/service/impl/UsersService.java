@@ -30,6 +30,6 @@ public class UsersService implements IUserService {
 
     @Override
     public Optional<Users> findUserByName(String name) {
-        return userRepository.findUserByNameUserContaining(name);
+        return userRepository.findUserByNameUser(name);
     }
 }
