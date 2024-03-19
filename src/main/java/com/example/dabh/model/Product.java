@@ -2,6 +2,7 @@ package com.example.dabh.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.service.spi.InjectService;
 
 import java.util.Set;
@@ -41,4 +42,9 @@ public class Product {
     public Product() {
 
     }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
 }

@@ -1,8 +1,12 @@
 package com.example.dabh.controller.MVC;
 
+import com.example.dabh.model.Category;
 import com.example.dabh.model.Product;
 import com.example.dabh.model.ProductForm;
+import com.example.dabh.repository.IProductRepository;
+import com.example.dabh.service.ICategoryService;
 import com.example.dabh.service.IProductService;
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.Banner;
@@ -25,6 +29,10 @@ import java.util.*;
 public class ProductMVCController {
     @Autowired
     private IProductService productService;
+    @Autowired
+    private IProductRepository productRepository;
+    @Autowired
+    private ICategoryService categoryService;
     @GetMapping("")
     public String showProductList(Model model, @PageableDefault(6) Pageable pageable) {
         // Lấy trang sản phẩm từ service
@@ -46,14 +54,57 @@ public class ProductMVCController {
 
         return "user/listCategoryAndProduct";
     }
+//    @GetMapping("/showASC")
+//    public String showProductListASC(Model model, @PageableDefault(6) Pageable pageable) {
+//        // Lấy trang sản phẩm từ service
+//        Page<Product> productsPage = productRepository.showProductsByASC(pageable);
+//        model.addAttribute("productsPage", productsPage);
+//
+//        // Lấy danh sách ảnh
+//        List<String> imagePaths = new ArrayList<>();
+//        List<String> imageNames = new ArrayList<>();
+//        for (Product product : productsPage.getContent()) {
+//            // Thêm đường dẫn ảnh vào danh sách
+//            imagePaths.add("/images/" + product.getPicture());
+//            // Thêm tên ảnh vào danh sách
+//            imageNames.add(product.getPicture());
+//        }
+//        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
+//        model.addAttribute("imagePaths", imagePaths);
+//        model.addAttribute("imageNames", imageNames);
+//
+//        return "user/listCategoryAndProduct";
+//    }
+//    @GetMapping("/showDESC")
+//    public String showProductListDESC(Model model, @PageableDefault(6) Pageable pageable) {
+//        // Lấy trang sản phẩm từ service
+//        Page<Product> productsPage = productRepository.showProductsByDESC(pageable);
+//        model.addAttribute("productsPage", productsPage);
+//
+//        // Lấy danh sách ảnh
+//        List<String> imagePaths = new ArrayList<>();
+//        List<String> imageNames = new ArrayList<>();
+//        for (Product product : productsPage.getContent()) {
+//            // Thêm đường dẫn ảnh vào danh sách
+//            imagePaths.add("/images/" + product.getPicture());
+//            // Thêm tên ảnh vào danh sách
+//            imageNames.add(product.getPicture());
+//        }
+//        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
+//        model.addAttribute("imagePaths", imagePaths);
+//        model.addAttribute("imageNames", imageNames);
+//
+//        return "user/listCategoryAndProduct";
+//    }
     @GetMapping("/create")
     public String showFormCreateProduct(Model model){
         model.addAttribute("product",new ProductForm());
+        model.addAttribute("categoryList",categoryService.showAll());
         return "/user/createProduct";
     }
     @PostMapping("/add/{name}/{password}")
     public String createProduct(@ModelAttribute ProductForm productForm ,@PathVariable("name") String name ,@PathVariable("password") String password){
-        productService.save(productForm,name,password, productForm.getIdCategory());
+        productService.save(productForm,name,password,productForm.getIdCategory() );
         return "redirect:/products";
     }
     @GetMapping("/delete/{id}")
@@ -81,6 +132,17 @@ public class ProductMVCController {
     @PostMapping("/search")
     public String searchProduct(@RequestParam("keyWord") String keyword , Model model){
         Iterable<Product> productIterable = productService.findProduct(keyword);
+        List<String> imagePaths = new ArrayList<>();
+        List<String> imageNames = new ArrayList<>();
+        for (Product product : productIterable) {
+            // Thêm đường dẫn ảnh vào danh sách
+            imagePaths.add("/images/" + product.getPicture());
+            // Thêm tên ảnh vào danh sách
+            imageNames.add(product.getPicture());
+        }
+        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
+        model.addAttribute("imagePaths", imagePaths);
+        model.addAttribute("imageNames", imageNames);
         model.addAttribute("products",productIterable);
         return "/user/search";
     }

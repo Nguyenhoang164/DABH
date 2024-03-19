@@ -46,8 +46,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="idCategory">Category:</label>
-            <input type="number" class="form-control" id="idCategory" th:field="*{idCategory}" placeholder="Enter product category ID">
+            <label>Category:</label>
+            <select th:field="*{idCategory}">
+                <option th:each="row : ${categoryList}" th:value="${row.id}" th:text="${row.getNameCategory()}"></option>
+            </select>
         </div>
         <div class="form-group">
             <label for="picture">Img:</label>

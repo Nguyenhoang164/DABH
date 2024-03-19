@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +40,7 @@ public class ProductService implements IProductService {
     public Optional<Product> findObjectById(int id) {
         return productRepository.findById(id);
     }
-    @Value("${spring.web.resources.static-locations}")
+    @Value("C:/Users/PC/Documents/BE2/DABH/src/main/resources/static/picture")
     private String fileUpload;
 
 
@@ -71,15 +72,17 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void delete(int id, String name, String password) {
         Optional<Users> usersOptional = userRepository.findUserByNameUser(name);
         if (usersOptional.get().getPassword().equals(password)) {
             Iterable<Role> roles = roleRepository.findRoleByUsers(Collections.singleton(usersOptional.get()));
             for (Role role : roles) {
                 if (role.getNameRole().equals("admin")) {
-                    Optional<Product> productOptional = productRepository.findById(id);
-                    productDetailRepository.deleteProductDetailByProduct(productOptional.get());
-                    productRepository.deleteById(id);
+                    Optional<Product> product = productRepository.findById(id);
+                   productDetailRepository.deleteProductDetailByProduct(product.get());
+                   productRepository.deleteProductById(id);
+
                 }
             }
         } else {

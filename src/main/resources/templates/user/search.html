@@ -30,6 +30,8 @@
     <!-- Bảng danh sách sản phẩm -->
     <table class="table table-bordered">
         <thead class="thead-dark">
+        <a th:href="@{/products/showByASC}">ASC</a>
+        <a th:href="@{/products/showByDESC}">DESC</a>
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -44,14 +46,17 @@
         </thead>
         <tbody>
         <!-- Lặp qua danh sách sản phẩm -->
-        <tr th:each="product : ${products}">
+        <tr th:each="product,index : ${products}">
             <td th:text="${product.id}"></td>
-            <td th:text="${product.nameProduct}"></td>
-            <td th:text="${product.price}"></td>
+            <td><a th:href="@{/productDetail/show/{id}(id=${product.getId()})}"><p th:text="${product.nameProduct}"></p></a></td>
+            <td> <p th:text="${product.price} + 'đ'"></p></td>
             <td th:text="${product.type}"></td>
             <td th:text="${product.descripsion}"></td>
             <td th:text="${product.status ? 'Active' : 'Inactive'}"></td>
-            <td><img class="product-img" th:src="@{'/picture/' + ${product.picture}}"/></td>
+            <td>
+                <!-- Sử dụng index để truy cập vào phần tử tương ứng trong danh sách -->
+                <img th:src="@{${imagePaths[__${index.index}__]}}" th:alt="${imageNames[__${index.index}__]}" style="width: 80px;height: 80px"/>
+            </td>
             <td th:text="${product.users.nameUser}"></td>
             <td>
                 <!-- Link xóa sản phẩm -->
