@@ -27,6 +27,7 @@
     </form>
     <!-- Link tạo mới sản phẩm -->
     <a class="btn btn-primary mb-3" th:href="@{/products/create}">Create new product</a>
+    <a class="btn btn-primary mb-3" th:href="@{/products/showCart/{id}(id = ${id})}">Check cart</a>
     <!-- Bảng danh sách sản phẩm -->
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -60,6 +61,12 @@
                 <a class="btn btn-danger btn-sm" th:href="@{/products/delete/{id}(id=${product.id})}">Delete</a>
                 <!-- Link cập nhật sản phẩm -->
                 <a class="btn btn-primary btn-sm" th:href="@{/products/update/{id}(id=${product.id})}">Update</a>
+            </td>
+            <td>
+<!--                <p th:text="${product.id} +'/'+ ${id}"></p>-->
+<!--                th:href="@{/products/cart/{id}(id=${product.id}) + '?idCustomer='+ ${id}}"-->
+<!--                th:with="customerId=${id}" th:href="@{/products/cart/{id}(id=${product.id})?id=${customerId}}"-->
+                <a class="btn btn-primary btn-sm"  th:href="@{/products/cart/{id}/{idCustomer}(id=${product.id}, idCustomer=${id})}">Add to cart</a>
             </td>
         </tr>
         </tbody>

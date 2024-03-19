@@ -1,8 +1,11 @@
 package com.example.dabh.controller.MVC;
 
+import com.example.dabh.model.Cart;
 import com.example.dabh.model.Product;
 import com.example.dabh.model.ProductForm;
+import com.example.dabh.service.ICartService;
 import com.example.dabh.service.IProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.Banner;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.*;
@@ -25,11 +29,15 @@ import java.util.*;
 public class ProductMVCController {
     @Autowired
     private IProductService productService;
-    @GetMapping("")
-    public String showProductList(Model model, @PageableDefault(6) Pageable pageable) {
+    @Autowired
+    private ICartService cartService;
+    @GetMapping("{id}")
+    public String showProductList(Model model, @PageableDefault(6) Pageable pageable,@PathVariable("id") int idCustomer) {
         // Lấy trang sản phẩm từ service
         Page<Product> productsPage = productService.findAll(pageable);
+
         model.addAttribute("productsPage", productsPage);
+        model.addAttribute("id",idCustomer);
 
         // Lấy danh sách ảnh
         List<String> imagePaths = new ArrayList<>();
@@ -46,6 +54,7 @@ public class ProductMVCController {
 
         return "user/listCategoryAndProduct";
     }
+
     @GetMapping("/create")
     public String showFormCreateProduct(Model model){
         model.addAttribute("product",new ProductForm());
@@ -84,5 +93,42 @@ public class ProductMVCController {
         model.addAttribute("products",productIterable);
         return "/user/search";
     }
+
+    @GetMapping("/cart/{id}/{idCustomer}")
+    public ModelAndView addToCart(HttpSession session, @PathVariable("id") int idProducts, @PathVariable("idCustomer") int idCustomer){
+        cartService.addToCart(session,idCustomer,idProducts);
+        ModelAndView modelAndView = new ModelAndView("redirect:/products/"+idCustomer);
+        return modelAndView;
+    }
+    @GetMapping("/plus/{id}/{idCustomer}")
+    public ModelAndView plus(HttpSession session, @PathVariable("id") int idProducts, @PathVariable("idCustomer") int idCustomer){
+        cartService.addToCart(session,idCustomer,idProducts);
+        ModelAndView modelAndView = new ModelAndView("redirect:/products/showCart/"+idCustomer);
+        return modelAndView;
+    }
+
+    @GetMapping("/minus/{id}/{idCustomer}")
+    public ModelAndView minus(HttpSession session, @PathVariable("id") int idProducts, @PathVariable("idCustomer") int idCustomer){
+        cartService.minusOneProduct(session,idCustomer,idProducts);
+        ModelAndView modelAndView = new ModelAndView("redirect:/products/showCart/"+idCustomer);
+        return modelAndView;
+    }
+
+
+    @GetMapping("/showCart/{id}")
+    public ModelAndView showCart(HttpSession session, @PathVariable("id") int id){
+        List<Cart> carts = cartService.getCart(session,id);
+        double total=0;
+        for(Cart c: carts){
+              total += c.getPrice();
+        }
+        ModelAndView modelAndView = new ModelAndView("/user/cart");
+        modelAndView.addObject("carts",carts);
+        modelAndView.addObject("id",id);
+        modelAndView.addObject("total",total);
+        return modelAndView;
+    }
+
+
 
 }

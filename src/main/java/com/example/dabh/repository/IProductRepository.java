@@ -11,4 +11,6 @@ public interface IProductRepository extends CrudRepository<Product , Integer> {
     Iterable<Product> findAllByCategory(Category category);
     void deleteAllByCategoryId(int id);
     Page<Product> findAll(Pageable pageable);
+
+    Product findOneById(int id);
 }
