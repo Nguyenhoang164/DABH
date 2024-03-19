@@ -35,10 +35,6 @@ public class CategoryService implements ICategoryService {
         return categoryRepository.findById(id);
     }
 
-    @Override
-    public Iterable<Category> findByAllOption(String keyword) {
-        return null;
-    }
 
     @Override
     public void save(Category category, String name, String password) {

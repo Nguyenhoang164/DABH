@@ -23,10 +23,6 @@ public class UsersService implements IUserService {
         return Optional.empty();
     }
 
-    @Override
-    public Iterable<Users> findByAllOption(String keyword) {
-        return null;
-    }
 
     @Override
     public Optional<Users> findUserByName(String name) {

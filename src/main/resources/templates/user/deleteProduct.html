@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Delete Product</title>
 </head>
 <body>
-
+<h1>Delete Product</h1>
+<form action="#" th:action="@{/products/delete/{name}/{password}(name='staff1',password='admin123')}" th:object="${product}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    <p>Are you sure you want to delete product "<span th:text="${product.nameProduct}"></span>"?</p>
+    <p><input type="submit" value="Delete" /> <a th:href="@{/products}" >Cancel</a></p>
+</form>
 </body>
 </html>

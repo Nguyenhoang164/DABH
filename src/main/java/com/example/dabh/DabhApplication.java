@@ -8,6 +8,7 @@ public class DabhApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DabhApplication.class, args);
+        System.out.println("");
     }
 
 }

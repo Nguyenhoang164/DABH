@@ -17,6 +17,7 @@ public class Product {
     private String type;
     private String descripsion;
     private boolean status;
+    private String picture;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private Users users;
@@ -26,4 +27,18 @@ public class Product {
     @ManyToMany
     @JoinTable(name = "product_bill")
     private Set<Bill> bills;
+
+    public Product(int id, String nameProduct, String price, String type, String descripsion, boolean status, String filename) {
+        this.id = id;
+        this.nameProduct = nameProduct;
+        this.price = price;
+        this.type = type;
+        this.descripsion = descripsion;
+        this.status = status;
+        this.picture = filename;
+    }
+
+    public Product() {
+
+    }
 }

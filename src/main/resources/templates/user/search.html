@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Sử dụng Bootstrap để tạo giao diện -->
+    <style>
+        body {
+            padding: 20px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .product-img {
+            max-width: 200px;
+            max-height: 150px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Product List</h1>
+    <form th:action="@{/products/search}" method="post">
+        <input type="text" name="keyWord" style="width: 200px">
+        <button type="submit" value="check">Check</button>
+    </form>
+    <!-- Link tạo mới sản phẩm -->
+    <a class="btn btn-primary mb-3" th:href="@{/products/create}">Create new product</a>
+    <!-- Bảng danh sách sản phẩm -->
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Img</th>
+            <th>User</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Lặp qua danh sách sản phẩm -->
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.nameProduct}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.type}"></td>
+            <td th:text="${product.descripsion}"></td>
+            <td th:text="${product.status ? 'Active' : 'Inactive'}"></td>
+            <td><img class="product-img" th:src="@{'/picture/' + ${product.picture}}"/></td>
+            <td th:text="${product.users.nameUser}"></td>
+            <td>
+                <!-- Link xóa sản phẩm -->
+                <a class="btn btn-danger btn-sm" th:href="@{/products/delete/{id}(id=${product.id})}">Delete</a>
+                <!-- Link cập nhật sản phẩm -->
+                <a class="btn btn-primary btn-sm" th:href="@{/products/update/{id}(id=${product.id})}">Update</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    <!-- Phân trang -->
+</body>
+</html>

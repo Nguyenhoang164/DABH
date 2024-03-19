@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Product</title>
+</head>
+<body>
+<h1>Create category</h1>
+<form th:action="@{/category/create/{name}/{password}(name='staff1',password='admin123')}" th:object="${category}" method="post">
+    <p>ID: <input type="hidden" th:field="*{id}" /></p>
+    <p>Name category: <input type="text" th:field="*{nameCategory}" /></p>
+    <p>Description: <input type="text" th:field="*{descripsion}" /></p>
+    <p><input type="submit" value="Save" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>

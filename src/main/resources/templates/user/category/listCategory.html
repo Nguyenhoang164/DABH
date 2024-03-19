@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Category List</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Link CSS Bootstrap -->
+  <!-- Style CSS -->
+  <style>
+    /* Định dạng cho phần header */
+    header {
+      padding: 20px 0;
+    }
+
+    /* Định dạng cho phần nội dung */
+    .container {
+      margin-top: 50px;
+    }
+
+    /* Định dạng cho thẻ table */
+    table {
+      width: 100%;
+    }
+
+    /* Định dạng cho thẻ th */
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle !important;
+    }
+
+    /* Định dạng cho thẻ td */
+    td {
+      text-align: center;
+      vertical-align: middle !important;
+    }
+
+    /* Định dạng cho các nút chức năng */
+    .btn {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1 class="text-center">Category List</h1>
+    <!-- Link tới trang tạo mới danh mục -->
+    <a class="btn btn-primary" th:href="@{/category/create}">Create new category</a>
+  </div>
+</header>
+<div class="container">
+  <!-- Bảng danh sách danh mục -->
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name category</th>
+      <th>Description</th>
+      <th>User</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Lặp qua danh sách danh mục -->
+    <tr th:each="category : ${categorys}">
+      <td th:text="${category.id}"></td>
+      <td th:text="${category.nameCategory}"></td>
+      <td th:text="${category.descripsion}"></td>
+      <td th:text="${category.users.nameUser}"></td>
+      <!-- Nút xóa -->
+      <td>
+        <a class="btn btn-danger" th:href="@{/category/delete/{id}(id=${category.id})}">Delete</a>
+        <!-- Nút cập nhật -->
+        <a class="btn btn-primary" th:href="@{/category/update/{id}(id=${category.id})}">Update</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

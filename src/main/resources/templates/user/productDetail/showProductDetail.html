@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+    <!-- Định dạng CSS cho giao diện -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div th:if="${productDetail.getId() == 0}">
+        <a th:href="@{/productDetail/create/{id}(id=${idProduct})}"> Create new product detail</a>
+    </div>
+    <a th:href="@{/productDetail/update/{id}(id = ${productDetail.getId()})}">Update</a>
+
+    <h1>Product Detail</h1>
+    <div class="row">
+        <!-- Kích thước sản phẩm -->
+        <div class="col-md-4">
+            <h2>Size</h2>
+            <p th:text="${productDetail.size}"></p>
+        </div>
+        <!-- Tham số sản phẩm -->
+        <div class="col-md-4">
+            <h2>Parameter</h2>
+            <p th:text="${productDetail.parameter}"></p>
+        </div>
+        <!-- Mô tả sản phẩm -->
+        <div class="col-md-4">
+            <h2>Description</h2>
+            <p th:text="${productDetail.descripsion}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

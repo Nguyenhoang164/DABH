@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Product Detail</title>
+    <!-- Định dạng CSS cho giao diện -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Create Product Detail</h1>
+    <form th:action="@{/productDetail/save/{name}/{password}(name='staff1',password='admin123')}" th:object="${productDetail}" method="post">
+        <div>
+            <label>Product id</label>
+            <input type="number" th:field="*{product.id}" th:text="${idProduct}">
+        </div>
+        <!-- Kích thước sản phẩm -->
+        <div class="form-group">
+            <label for="size">Size:</label>
+            <input type="text" class="form-control" id="size" th:field="*{size}">
+        </div>
+        <!-- Tham số sản phẩm -->
+        <div class="form-group">
+            <label for="parameter">Parameter:</label>
+            <input type="text" class="form-control" id="parameter" th:field="*{parameter}">
+        </div>
+        <!-- Mô tả sản phẩm -->
+        <div class="form-group">
+            <label>Description:</label>
+            <label>
+                <input type="text" th:field="*{descripsion}" />
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+</body>
+</html>
