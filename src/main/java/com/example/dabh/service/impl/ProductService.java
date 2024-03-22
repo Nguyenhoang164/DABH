@@ -121,8 +121,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Iterable<Product> findProduct(String keyValue) {
-         Iterable<Product> products = productRepository.findAllByNameProductContaining(keyValue);
-        Iterable<Product> productIterable = new ArrayList<>();
+         Iterable<Product> products = productRepository.findAllByProductContaining(keyValue);
+         Iterable<Product> productIterable = new ArrayList<>();
          if (!products.iterator().hasNext()){
              Iterable<Category> categoryIterable = categoryRepository.findAllByNameCategoryContains(keyValue);
              for (Category category : categoryIterable){

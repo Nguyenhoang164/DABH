@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill</title>
+    <!-- Link CSS của Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container">
+    <h1 class="mt-5 mb-4">Bill</h1>
+    <!-- Hiển thị tên người dùng -->
+    <div class="row">
+        <div class="col-md-6">
+            <p>Tên người dùng: <span th:text="${customersBuy}"></span></p>
+        </div>
+    </div>
+    <!-- Hiển thị danh sách các hóa đơn -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>List of Bills</h3>
+            <!-- Duyệt qua danh sách các hóa đơn từ bills -->
+            <div th:each="bill,index : ${billsBuy}" class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title">Bill <span th:text="${bill.id}"></span></h5>
+                </div>
+                <div class="card-body">
+                    <div th:each="product : ${products}">
+                        <span th:text="${product.getNameProduct()}">Product Name</span>
+                    </div>
+                    <!-- Duyệt qua danh sách sản phẩm của mỗi hóa đơn -->
+                    <p>Number of Products: <span th:text="${bill.getNumberProduct()}"></span></p>
+                    <p>Date: <span th:text="${bill.getDate()}"></span></p>
+                </div>
+            </div>
 
+        </div>
+    </div>
+</div>
+<!-- Link JS của Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

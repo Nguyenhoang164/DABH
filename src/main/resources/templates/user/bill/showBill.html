@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Order List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Number of Products</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Customer</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="orderTableBody" >
+    <tr th:each="row :${bills}">
+        <td th:text="${row.id}"></td>
+        <td th:text="${row.numberProduct}"></td>
+        <td th:text="${row.date}"></td>
+        <td th:text="${row.status ? 'xác thực' : 'chưa xác thực'}"></td>
+        <td th:text="${row.customer.getNameCustomer()}"></td>
+        <td th:style="${row.status ?  'display: none;' : 'display: table-cell;'}">
+            <a th:href="@{/bill/updateBill/{id}/{name}/{password}(id=${row.getId()},name='staff1',password='admin123')}">Confirm bill</a>
+        </td>
+    </tr>
+    <!-- Order rows will be dynamically populated here -->
+    </tbody>
+</table>

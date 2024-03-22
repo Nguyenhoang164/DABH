@@ -25,8 +25,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "id_category")
     private Category category;
-    @ManyToMany
-    @JoinTable(name = "product_bill")
+    @ManyToMany(mappedBy = "products")
     private Set<Bill> bills;
 
     public Product(int id, String nameProduct, String price, String type, String descripsion, boolean status, String filename) {
