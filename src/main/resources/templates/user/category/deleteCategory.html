@@ -8,7 +8,7 @@
 <h1>Delete Category</h1>
 <form action="#" th:action="@{/category/delete/{name}/{password}(name='staff1',password='admin123')}" th:object="${category}" method="post">
     <input type="hidden" th:field="*{id}" />
-    <p>Are you sure you want to delete product "<span th:text="${category.nameCategory}"></span>"?</p>
+    <p>Are you sure you want to delete product "<span th:text="${category.nameCategory}"></span>" ?</p>
     <p><input type="submit" value="Delete" /> <a th:href="@{/category}" >Cancel</a></p>
 </form>
 </body>

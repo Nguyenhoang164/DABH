@@ -87,8 +87,8 @@ public class BillMVCController {
 
     }
     //*------------------------Admin------------------------
-    @GetMapping("/showAllBill/{name}/{password}")
-    public String showAllBill(@PathVariable("name") String name , @PathVariable("password") String password,Model model){
+    @GetMapping("/showAllBill")
+    public String showAllBill(Model model){
         Iterable<Bill> billIterable = billRepository.findAll();
         model.addAttribute("bills",billIterable);
         return "user/bill/showBill";
@@ -97,14 +97,10 @@ public class BillMVCController {
     public String updateBillUser(@PathVariable("id") int id,@PathVariable("name") String name , @PathVariable("password") String password,Model model){
         Optional<Bill> billOptional = billRepository.findById(id);
         Optional<Users> userIterable = userService.findUserByName(name);
-        Iterable<Users> usersIterable = userService.showAll();
-        for (Users users : usersIterable){
-            if (userIterable.get().getNameUser().equals(users.getNameUser())){
                 if (userIterable.get().getPassword().equals(password)){
                     billService.updateBillForCustomer(billOptional.get(),id);
                 }
-            }
-        }
-        return "/user/bill/showBill";
+
+        return "redirect:/bill/showAllBill";
     }
 }

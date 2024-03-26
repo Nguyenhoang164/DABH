@@ -16,10 +16,69 @@
         .form-group {
             margin-bottom: 20px;
         }
+         body{
+             background-color: #e57575;
+         }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 25%;
+            background-color: #f3a3a3;
+            height: 100%; /* Full height */
+            position: fixed; /* Make it stick, even on scroll */
+            overflow: auto; /* Enable scrolling if the sidenav has too much content */
+            float: left;
+        }
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 36px;
+            text-decoration: none;
+        }
+
+        li a.active {
+            background-color: #ff0000;
+            color: #e57575;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #e33939;
+            text-decoration: none;
+        }
     </style>
 </head>
-<body>
-<div class="container">
+<body style="display: inline;justify-content: space-around">
+<ul>
+    <li>
+        <img th:src="@{'https://cdn.dribbble.com/users/1512432/screenshots/6932112/media/e6812724581a631ef3938af66ac7f002.png'}" style="width: 100% ; height: 200px" alt="logo">
+    </li>
+    <li>
+        <a  th:href="@{/category}">Category</a>
+    </li>
+    <li><a th:href="@{/products/create}">Create new product</a></li>
+    <li><a th:href="@{/bill/showAllBill}">Bill</a></li>
+    <li><a th:href="@{/category/create}">Create new category</a></li>
+    <li><a class="active" th:href="@{/products}">Product List</a></li>
+    <li><a>Customer</a></li>
+    <li><a>History</a></li>
+    <li><a th:href="@{/total}">Total</a></li>
+    <li><a>Contact</a></li>
+    <li><a>Manager</a></li>
+    <li><a th:href="@{/map}">Location</a></li>
+    <li><a>AI</a></li>
+</ul>
+<div class="container" style="float: right">
     <h1 class="text-center">Update Product</h1>
     <form action="#" th:action="@{/products/update/{name}/{password}(name='staff1',password='admin123')}" th:object="${product}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}" />

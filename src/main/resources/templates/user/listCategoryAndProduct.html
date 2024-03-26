@@ -4,31 +4,109 @@
     <meta charset="UTF-8">
     <title>Product List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional Bootstrap Theme -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Sử dụng Bootstrap để tạo giao diện -->
+    <script>
+        // Đợi cho trang tải hoàn tất trước khi thực hiện các hành động
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy thông điệp từ model
+            var message = "cập nhật dữ liệu thành công";
+
+            // Kiểm tra nếu có thông điệp
+            if (message) {
+                // Hiển thị thông báo dưới dạng alert
+                alert(message);
+
+                // Xóa thông điệp sau 5 giây
+                setTimeout(function(){
+                    // Xóa thông điệp
+                    message = "";
+                }, 5000);
+            }
+        });
+    </script>
     <style>
         body {
             padding: 20px;
+            background-color: #f5cbcb;
         }
         .container {
-            margin-top: 20px;
+            width: 100%;
+            float: right;
         }
         .product-img {
             max-width: 200px;
             max-height: 150px;
         }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 25%;
+            background-color: #f3a3a3;
+            height: 100%; /* Full height */
+            position: fixed; /* Make it stick, even on scroll */
+            overflow: auto; /* Enable scrolling if the sidenav has too much content */
+            float: left;
+        }
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 36px;
+            text-decoration: none;
+        }
+
+        li a.active {
+            background-color: #ff0000;
+            color: #e57575;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #e33939;
+            text-decoration: none;
+        }
     </style>
+
 </head>
-<body>
+<body style="display: inline;justify-content: space-evenly">
+<ul>
+    <li>
+        <img th:src="@{'https://cdn.dribbble.com/users/1512432/screenshots/6932112/media/e6812724581a631ef3938af66ac7f002.png'}" style="width: 100% ; height: 200px" alt="logo">
+    </li>
+    <li>
+        <a  th:href="@{/category}">Category</a>
+    </li>
+    <li><a th:href="@{/products/create}">Create new product</a></li>
+    <li><a th:href="@{/bill/showAllBill}">Bill</a></li>
+    <li><a th:href="@{/category/create}">Create new category</a></li>
+    <li><a class="active" th:href="@{/products}">Product List</a></li>
+    <li><a>Customer</a></li>
+    <li><a>History</a></li>
+    <li><a th:href="@{/total}">Total</a></li>
+    <li><a>Contact</a></li>
+    <li><a>Manager</a></li>
+    <li><a th:href="@{/map}">Location</a></li>
+    <li><a>AI</a></li>
+</ul>
 <div class="container">
-    <h1 class="text-center">Product List</h1>
-    <form th:action="@{/products/search}" method="post">
-        <input type="text" name="keyWord" style="width: 200px">
-        <button type="submit" value="check">Check</button>
-    </form>
-    <!-- Link tạo mới sản phẩm -->
-    <a class="btn btn-primary mb-3" th:href="@{/products/create}">Create new product</a>
+    <div style="width: 100%;height: 45px;background-color: red">
+        <div style="text-align: center;padding-top: 4px">
+            <form th:action="@{/products/search}" method="post">
+                <input type="text" name="keyWord" style="width: 400px">
+                <button type="submit" value="check">Check</button>
+            </form>
+        </div>
+    </div>
+
+<div style="padding-top: 50px">
     <!-- Bảng danh sách sản phẩm -->
-    <table class="table table-bordered">
+    <table class="table table-bordered" s>
         <thead class="thead-dark">
         <tr>
             <th>ID</th>
@@ -53,7 +131,7 @@
             <td th:text="${product.status ? 'Active' : 'Inactive'}"></td>
             <td>
                 <!-- Sử dụng index để truy cập vào phần tử tương ứng trong danh sách -->
-                <img th:src="@{${imagePaths[__${index.index}__]}}" th:alt="${imageNames[__${index.index}__]}" style="width: 80px;height: 80px"/>
+                <img th:src="@{${imagePaths[__${index.index}__]}}" th:alt="${imageNames[__${index.index}__]}" style="width: 150px;height: 150px"/>
             </td>
             <td th:text="${product.users.nameUser}"></td>
             <td>
@@ -66,7 +144,7 @@
         </tbody>
     </table>
     <!-- Phân trang -->
-    <div>
+    <div style="text-align: center">
         <a th:if="${productsPage.hasPrevious()}"
            th:href="@{/products(page=${productsPage.number - 1})}">Previous</a>
         <span th:text="${productsPage.number + 1}"></span> | <span th:text="${productsPage.totalPages}"></span>
@@ -74,5 +152,7 @@
            th:href="@{/products(page=${productsPage.number + 1})}">Next</a>
     </div>
 </div>
+</div>
+<div style="clear: both "></div>
 </body>
 </html>

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.*;
@@ -86,16 +87,17 @@ public class ProductMVCController {
     }
 
 
-    @GetMapping("/showCart/{id}")
-    public ModelAndView showCart(HttpSession session, @PathVariable("id") int id){
-        List<Cart> carts = cartService.getCart(session,id);
+    @GetMapping("/showCart")
+    public ModelAndView showCart(HttpSession session){
+        Optional<Customer> customerOptional = (Optional<Customer>) session.getAttribute("customer");
+        List<Cart> carts = cartService.getCart(session,customerOptional.get().getId());
         double total=0;
         for(Cart c: carts){
             total += c.getPrice();
         }
         ModelAndView modelAndView = new ModelAndView("/user/cart");
         modelAndView.addObject("carts",carts);
-        modelAndView.addObject("id",id);
+        modelAndView.addObject("id",customerOptional.get().getId());
         modelAndView.addObject("total",total);
         return modelAndView;
     }
@@ -111,7 +113,7 @@ public class ProductMVCController {
         List<String> imageNames = new ArrayList<>();
         for (Product product : productsPage.getContent()) {
             // Thêm đường dẫn ảnh vào danh sách
-            imagePaths.add("/images/" + product.getPicture());
+            imagePaths.add(product.getPicture());
             // Thêm tên ảnh vào danh sách
             imageNames.add(product.getPicture());
         }
@@ -170,8 +172,9 @@ public class ProductMVCController {
         return "/user/createProduct";
     }
     @PostMapping("/add/{name}/{password}")
-    public String createProduct(@ModelAttribute ProductForm productForm ,@PathVariable("name") String name ,@PathVariable("password") String password){
+    public String createProduct(@ModelAttribute ProductForm productForm , @PathVariable("name") String name , @PathVariable("password") String password , RedirectAttributes redirectAttributes){
         productService.save(productForm,name,password,productForm.getIdCategory() );
+        redirectAttributes.addFlashAttribute("message", "Thêm sản phẩm thành công!");
         return "redirect:/products";
     }
     @GetMapping("/delete/{id}")
@@ -181,8 +184,9 @@ public class ProductMVCController {
        return "/user/deleteProduct";
     }
     @PostMapping("/delete/{name}/{password}")
-    public String deleteProduct(@ModelAttribute Product product , @PathVariable("name") String name , @PathVariable("password") String password){
+    public String deleteProduct(@ModelAttribute Product product , @PathVariable("name") String name , @PathVariable("password") String password , RedirectAttributes redirectAttributes){
         productService.delete(product.getId(),name,password);
+        redirectAttributes.addFlashAttribute("message", "xoa sản phẩm thành công!");
         return "redirect:/products";
     }
     @GetMapping("/update/{id}")
@@ -192,8 +196,9 @@ public class ProductMVCController {
         return "user/updateProduct";
     }
     @PostMapping("/update/{name}/{password}")
-    public String updateProduct(@ModelAttribute ProductForm productForm,@PathVariable("name") String name,@PathVariable("password") String password){
+    public String updateProduct(@ModelAttribute ProductForm productForm,@PathVariable("name") String name,@PathVariable("password") String password , RedirectAttributes redirectAttributes){
         productService.update(productForm.getId(),productForm,name,password);
+        redirectAttributes.addFlashAttribute("message", "cap nhat sản phẩm thành công!");
         return "redirect:/products";
     }
     @PostMapping("/search")

@@ -30,6 +30,8 @@ public class ProductService implements IProductService {
     private IRoleRepository roleRepository;
     @Autowired
     private IProductDetailRepository productDetailRepository;
+    @Autowired
+    private IBillRepository billRepository;
 
     @Override
     public Iterable<Product> showAll() {
@@ -40,7 +42,7 @@ public class ProductService implements IProductService {
     public Optional<Product> findObjectById(int id) {
         return productRepository.findById(id);
     }
-    @Value("C:/Users/PC/Documents/BE2/DABH/src/main/resources/static/picture")
+    @Value("C:/Users/PC/Documents/BE2/DABH/src/main/resources/static/picture/")
     private String fileUpload;
 
 
@@ -58,7 +60,7 @@ public class ProductService implements IProductService {
                     }catch (IOException e){
                         throw new RuntimeException();
                     }
-                    Product product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),filename);
+                    Product product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),"picture/"+filename);
                     Optional<Category> categoryOptional = categoryRepository.findById(idCategory);
                     product.setCategory(categoryOptional.get());
                     product.setUsers(usersOptional.get());
@@ -80,8 +82,16 @@ public class ProductService implements IProductService {
             for (Role role : roles) {
                 if (role.getNameRole().equals("admin")) {
                     Optional<Product> product = productRepository.findById(id);
-                   productDetailRepository.deleteProductDetailByProduct(product.get());
-                   productRepository.deleteProductById(id);
+                    Optional<ProductDetail> productDetail = productDetailRepository.findProductDetailByProduct(product.get());
+                    if (productDetail.isEmpty()){
+                        productRepository.deleteById(id);
+                    }else{
+                        billRepository.deleteBillByProducts(id);
+                        productDetailRepository.deleteProductDetailByProduct(product.get());
+                        productRepository.deleteProductById(id);
+                    }
+
+
 
                 }
             }

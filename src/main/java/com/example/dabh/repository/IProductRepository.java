@@ -28,6 +28,8 @@ public interface IProductRepository extends CrudRepository<Product , Integer> {
     List<Product> findAllProductsByCustomer(@Param("customer") Customer customer);
     Iterable<Product> findAllByBills(Set<Bill> bill);
     void deleteAllByCategoryId(int id);
-    void deleteProductById(int id);
+    @Modifying
+    @Query(value ="DELETE FROM Product WHERE id = :id AND (id NOT IN (SELECT id FROM product_detail) OR id NOT IN (SELECT product_id FROM bill_product))",nativeQuery = true )
+    void deleteProductById(@Param("id") int id);
     Page<Product> findAll(Pageable pageable);
 }

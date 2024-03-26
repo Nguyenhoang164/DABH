@@ -3,6 +3,7 @@ package com.example.dabh.controller.MVC;
 import com.example.dabh.model.Product;
 import com.example.dabh.model.ProductDetail;
 import com.example.dabh.repository.IProductDetailRepository;
+import com.example.dabh.repository.IProductRepository;
 import com.example.dabh.service.IProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -19,6 +20,8 @@ public class ProductDetailMVCController {
     private IProductDetailService productDetailService;
     @Autowired
     private IProductDetailRepository productDetailRepository;
+    @Autowired
+    private IProductRepository productRepository;
     @GetMapping("show/{id}")
     public String showDetail(@PathVariable("id") int id, Model model){
       Optional<ProductDetail> productDetail =  productDetailService.showProductDetailByIdProduct(id);
@@ -33,8 +36,10 @@ public class ProductDetailMVCController {
     }
     @GetMapping("/create/{id}")
     public String showProductDetail(@PathVariable("id") int id , Model model){
-        model.addAttribute("productDetail",new ProductDetail());
-        model.addAttribute("idProduct",id);
+        ProductDetail productDetail = new ProductDetail();
+        Optional<Product> productOptional = productRepository.findById(id);
+        productDetail.setProduct(productOptional.get());
+        model.addAttribute("productDetail",productDetail);
         return "user/productDetail/createProductDetail";
     }
     @PostMapping("/save/{name}/{password}")
