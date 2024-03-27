@@ -52,7 +52,7 @@ public class ProductMVCController {
         List<String> imageNames = new ArrayList<>();
         for (Product product : productsPage.getContent()) {
             // Thêm đường dẫn ảnh vào danh sách
-            imagePaths.add("/images/" + product.getPicture());
+            imagePaths.add( product.getPicture());
             // Thêm tên ảnh vào danh sách
             imageNames.add(product.getPicture());
         }

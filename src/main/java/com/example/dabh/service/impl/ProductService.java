@@ -42,7 +42,7 @@ public class ProductService implements IProductService {
     public Optional<Product> findObjectById(int id) {
         return productRepository.findById(id);
     }
-    @Value("C:/Users/PC/Documents/BE2/DABH/src/main/resources/static/picture/")
+    @Value("C:/Users/trong/IdeaProjects/2/DABH/src/main/resources/static/picture/")
     private String fileUpload;
 
 
@@ -67,7 +67,8 @@ public class ProductService implements IProductService {
                     productRepository.save(product);
                 }
             }
-        } else {
+        }
+        else {
             throw new RuntimeException();
         }
 
@@ -116,7 +117,7 @@ public class ProductService implements IProductService {
                         throw new RuntimeException();
                     }
                     Optional<Product> productOptional = productRepository.findById(id);
-                    Product product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),filename);
+                    Product product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),"picture/"+filename);
                     Optional<Category> categoryOptional = categoryRepository.findById(productOptional.get().getCategory().getId());
                     product.setCategory(categoryOptional.get());
                     product.setUsers(usersOptional.get());
