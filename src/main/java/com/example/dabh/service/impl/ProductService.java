@@ -6,7 +6,9 @@ import com.example.dabh.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -45,6 +47,16 @@ public class ProductService implements IProductService {
     @Value("C:/Users/trong/IdeaProjects/2/DABH/src/main/resources/static/picture/")
     private String fileUpload;
 
+
+    public List<Product> showListPaging (int pageNo,int pageSize,String sortBy){
+        Pageable paging = PageRequest.of(pageNo,pageSize,Sort.by(sortBy));
+        Page<Product> pagedResult = productRepository.findAll(paging);
+        if(pagedResult.hasContent()){
+            return pagedResult.getContent();
+        } else{
+            return new ArrayList<Product>();
+        }
+    }
 
     @Override
     public void save(ProductForm productForm, String name, String password, int idCategory) {
@@ -109,16 +121,25 @@ public class ProductService implements IProductService {
             Iterable<Role> roles = roleRepository.findRoleByUsers(Collections.singleton(usersOptional.get()));
             for (Role role : roles) {
                 if (role.getNameRole().equals("admin")) {
+                    Product product;
                     MultipartFile multipartFile = productForm.getPicture();
                     String filename = multipartFile.getOriginalFilename();
-                    try{
-                        FileCopyUtils.copy(productForm.getPicture().getBytes(),new File(fileUpload + filename));
-                    }catch (IOException e){
-                        throw new RuntimeException();
+                    if(filename.equals("")){
+                        Optional<Product> product1 = productRepository.findById(productForm.getId());
+                        product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),product1.get().getPicture());
+
                     }
+                    else {
+                        try{
+                            FileCopyUtils.copy(productForm.getPicture().getBytes(),new File(fileUpload + filename));
+                        }catch (IOException e){
+                            throw new RuntimeException();
+                        }
+                        product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),"picture/"+filename);
+                    }
+
                     Optional<Product> productOptional = productRepository.findById(id);
-                    Product product = new Product(productForm.getId(),productForm.getNameProduct(),productForm.getPrice(),productForm.getType(),productForm.getDescripsion(),productForm.isStatus(),"picture/"+filename);
-                    Optional<Category> categoryOptional = categoryRepository.findById(productOptional.get().getCategory().getId());
+                    Optional<Category> categoryOptional = categoryRepository.findById(productForm.getIdCategory());
                     product.setCategory(categoryOptional.get());
                     product.setUsers(usersOptional.get());
                     product.setId(id);

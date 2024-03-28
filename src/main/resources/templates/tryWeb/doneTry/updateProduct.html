@@ -10,13 +10,13 @@
         data-template="vertical-menu-template-free"
         xmlns:th="http://www.thymeleaf.org"
 >
-<head th:insert="/tryWeb/doneTry/header.html :: header"></head>
+<head th:insert="/tryWeb/doneTry/fragment/header.html :: header"></head>
 <body>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <!-- Menu -->
-        <div th:insert="/tryWeb/doneTry/aside.html :: aside"></div>
+        <div th:insert="/tryWeb/doneTry/fragment/aside.html :: aside"></div>
         <!-- / Menu -->
 
         <!-- Layout container -->
@@ -135,141 +135,127 @@
                     <h4 class="py-3 mb-4"><span class="text-muted fw-light">Forms /</span> Create</h4>
 
                     <div class="row">
-                        <!-- Form controls -->
-<!--                        <form id="formCreateProduct" th:action="@{/test/add/{name}/{password}(name='staff1',password='admin123')}" th:object="${product}" method="post" enctype="multipart/form-data">-->
-<!--                            <div class="col-md-6">-->
-<!--                                <div class="card mb-4">-->
-<!--                                    <h5 class="card-header">Create Product</h5>-->
-<!--                                    <div class="card-body">-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <input type="hidden" th:field="*{id}" />-->
-<!--                                            <label for="nameProduct" class="form-label">Name</label>-->
-<!--                                            <input-->
-<!--                                                    th:field="*{nameProduct}"-->
-<!--                                                    type="text"-->
-<!--                                                    class="form-control"-->
-<!--                                                    id="nameProduct"-->
-<!--                                                    placeholder=""/>-->
-<!--                                        </div>-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="price" class="form-label">Price</label>-->
-<!--                                            <input-->
-<!--                                                    th:field="*{price}"-->
-<!--                                                    class="form-control"-->
-<!--                                                    type="text"-->
-<!--                                                    id="price"-->
-<!--                                                    placeholder=""-->
-<!--                                                    />-->
-<!--                                        </div>-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="type" class="form-label">Type</label>-->
-<!--                                            <input-->
-<!--                                                    th:field="*{type}"-->
-<!--                                                    class="form-control"-->
-<!--                                                    type="text"-->
-<!--                                                    id="type"-->
-<!--                                                    placeholder=""-->
-<!--                                            />-->
-<!--                                        </div>-->
-<!--                                        <label for="Description" class="form-label">Description</label>-->
-<!--                                        <textarea th:field="*{descripsion}" class="form-control" id="Description"-->
-<!--                                                  rows="3"></textarea>-->
+                        <form id="formUpdateProduct" th:action="@{/test/update/{name}/{password}(name='staff1',password='admin123')}" th:object="${product}" method="post" enctype="multipart/form-data">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <h5 class="card-header">Create Product</h5>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <input type="hidden" th:field="*{id}" />
+                                            <label for="nameProduct" class="form-label">Name</label>
+                                            <input
+                                                    th:field="*{nameProduct}"
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="nameProduct"
+                                                    placeholder=""/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="price" class="form-label">Price</label>
+                                            <input
+                                                    th:field="*{price}"
+                                                    class="form-control"
+                                                    type="text"
+                                                    id="price"
+                                                    placeholder=""
+                                                    />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="type" class="form-label">Type</label>
+                                            <input
+                                                    th:field="*{type}"
+                                                    class="form-control"
+                                                    type="text"
+                                                    id="type"
+                                                    placeholder=""
+                                            />
+                                        </div>
+                                        <label for="Description" class="form-label">Description</label>
+                                        <textarea th:field="*{descripsion}" class="form-control" id="Description"
+                                                  rows="3"></textarea>
 
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="category" class="form-label">Category</label>-->
-<!--                                            <select th:field="*{idCategory}" class="form-select" id="category"-->
-<!--                                                    aria-label="Default select example">-->
-<!--                                                <option th:each="row : ${categoryList}" th:value="${row.id}" th:text="${row.getNameCategory()}"></option>-->
-<!--                                            </select>-->
-<!--                                        </div>-->
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Category</label>
+                                            <select name="categoryId" class="form-select" id="category"
+                                                    aria-label="Default select example">
+                                                <option th:each="row : ${categoryList}" th:value="${row.id}" th:text="${row.getNameCategory()}" th:selected="${row.id == product.category.id}">></option>
+                                            </select>
+                                        </div>
 
-<!--                                        <div class="form-check form-switch mb-4">-->
-<!--                                            <label for="checkboxactive">Active</label>-->
-<!--                                        <input th:field="*{status}" class="form-check-input" type="checkbox" id="checkboxactive" checked>-->
-<!--                                        </div>-->
-<!--                                        <div class="container">-->
-<!--                                            <div class="preview">-->
-<!--                                                <img id="img-preview" src="" />-->
+                                        <div class="form-check form-switch mb-4">
+                                            <label for="checkboxactive">Active</label>
+                                        <input th:field="*{status}" class="form-check-input" type="checkbox" id="checkboxactive" checked>
+                                        </div>
+                                        <div class="container">
+                                            <div class="preview">
+                                                <img id="img-preview" th:src="@{'/'+${imagePaths}}" />
 
-<!--                                                <label for="image-product">Upload Image</label>-->
-<!--                                                <input th:field="*{picture}"  accept="image/*" type="file" id="image-product" />-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <script>-->
-<!--                                            const input = document.getElementById('image-product');-->
-<!--                                            const image = document.getElementById('img-preview');-->
+                                                <label for="image-product">Upload Image</label>
+                                                <input th:field="*{picture}"  accept="image/*" type="file" id="image-product" />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            const input = document.getElementById('image-product');
+                                            const image = document.getElementById('img-preview');
+                                            const url = image.getAttribute('src')
+                                            console.log(url)
 
-<!--                                            input.addEventListener('change', (e) => {-->
-<!--                                                if (e.target.files.length) {-->
-<!--                                                    const src = URL.createObjectURL(e.target.files[0]);-->
-<!--                                                    image.src = src;-->
-<!--                                                }-->
-<!--                                            });-->
-<!--                                        </script>-->
-<!--                                        <div class="submit-btn">-->
-<!--                                            <div>-->
-<!--                                                <input id="submit" type="submit" value="Save" class="save-btn btn-setting">-->
-<!--                                            </div>-->
-<!--                                            <div>-->
-<!--                                                <input type="reset" value="Reset" class="reset-btn btn-setting">-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                            input.addEventListener('change', (e) => {
+                                                if (e.target.files.length) {
+                                                    const src = URL.createObjectURL(e.target.files[0]);
+                                                    image.src = src;
+                                                }
+                                            });
+                                        </script>
+                                        <div class="submit-btn">
+                                            <div>
+                                                <input id="submit" type="submit" value="Save" class="save-btn btn-setting">
+                                            </div>
+                                            <div>
+                                                <input type="reset" value="Reset" class="reset-btn btn-setting">
+                                            </div>
+                                        </div>
 
-<!--                                        <script>-->
-<!--                                            const form = document.getElementById('formCreateProduct');-->
-<!--                                            const submitBtn =document.getElementById('submit');-->
+                                        <script>
+                                            const form = document.getElementById('formUpdateProduct');
+                                            const submitBtn =document.getElementById('submit');
 
-<!--                                            function notify() {-->
-<!--                                                const Toast = Swal.mixin({-->
-<!--                                                    toast: true,-->
-<!--                                                    position: "top-end",-->
-<!--                                                    showConfirmButton: false,-->
-<!--                                                    timer: 3000,-->
-<!--                                                    timerProgressBar: true,-->
-<!--                                                    didOpen: (toast) => {-->
-<!--                                                        toast.onmouseenter = Swal.stopTimer;-->
-<!--                                                        toast.onmouseleave = Swal.resumeTimer;-->
-<!--                                                    }-->
-<!--                                                });-->
-<!--                                                Toast.fire({-->
-<!--                                                    icon: "warning",-->
-<!--                                                    title: "Pending"-->
-<!--                                                }).then(() =>{-->
-<!--                                                    const formData = new FormData(form);-->
-<!--                                                    fetch(form.action,{-->
-<!--                                                        method: 'post',-->
-<!--                                                        body: formData-->
-<!--                                                    }).then(response =>{-->
-<!--                                                        window.location.href = '/test?status=ok';-->
-<!--                                                    }).catch(error =>{-->
-<!--                                                        console.log('Error', error)-->
-<!--                                                    })-->
-
-<!--                                                    // const xhr = new XMLHttpRequest();-->
-<!--                                                    // xhr.open('POST', form.action);-->
-<!--                                                    // xhr.onload = function(){-->
-<!--                                                    //     if(xhr.status === 200){-->
-<!--                                                    //         window.location.href= form.action;-->
-<!--                                                    //     }else {-->
-<!--                                                    //         console.error('Request failed. Status:', xhr.status);-->
-<!--                                                    //     }-->
-<!--                                                    // };-->
-<!--                                                    // xhr.onerror = function (){-->
-<!--                                                    //     console.error('Request error')-->
-<!--                                                    // }-->
-<!--                                                    // const form = new FormData();-->
-<!--                                                    // xhr.send(form);-->
-<!--                                                });-->
-<!--                                            }-->
-<!--                                            submitBtn.addEventListener('click',(e) =>{-->
-<!--                                                e.preventDefault();-->
-<!--                                                notify();-->
-<!--                                            })-->
-<!--                                        </script>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </form>-->
+                                            function notify() {
+                                                const Toast = Swal.mixin({
+                                                    toast: true,
+                                                    position: "top-end",
+                                                    showConfirmButton: false,
+                                                    timer: 3000,
+                                                    timerProgressBar: true,
+                                                    didOpen: (toast) => {
+                                                        toast.onmouseenter = Swal.stopTimer;
+                                                        toast.onmouseleave = Swal.resumeTimer;
+                                                    }
+                                                });
+                                                Toast.fire({
+                                                    icon: "warning",
+                                                    title: "Pending"
+                                                }).then(() =>{
+                                                    const formData = new FormData(form);
+                                                    fetch(form.action,{
+                                                        method: 'post',
+                                                        body: formData
+                                                    }).then(response =>{
+                                                        window.location.href = '/test?status=update';
+                                                    }).catch(error =>{
+                                                        console.log('Error', error)
+                                                    })
+                                                });
+                                            }
+                                            submitBtn.addEventListener('click',(e) =>{
+                                                e.preventDefault();
+                                                notify();
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
 
 
                     </div>
@@ -326,25 +312,8 @@
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
+<div th:insert="/tryWeb/doneTry/fragment/header.html :: animation-js"></div>
 
-<script src="../assets/vendor/libs/jquery/jquery.js"></script>
-<script src="../assets/vendor/libs/popper/popper.js"></script>
-<script src="../assets/vendor/js/bootstrap.js"></script>
-<script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-<script src="../assets/vendor/js/menu.js"></script>
 
-<!-- endbuild -->
-
-<!-- Vendors JS -->
-
-<!-- Main JS -->
-<script src="../assets/js/main.js"></script>
-
-<!-- Page JS -->
-
-<script src="../assets/js/form-basic-inputs.js"></script>
-
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>

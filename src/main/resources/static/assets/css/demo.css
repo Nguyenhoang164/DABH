@@ -218,7 +218,7 @@ input[type="checkbox"].switch_1:after{
 input[type="checkbox"].switch_1:checked:after{
   left: calc(100% - 1.5em);
 }
-#formCreateProduct{
+#formCreateProduct,#formUpdateProduct{
   display: flex;
   justify-content: center;
 }

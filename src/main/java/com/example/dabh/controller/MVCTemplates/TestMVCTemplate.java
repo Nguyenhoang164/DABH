@@ -1,4 +1,4 @@
-package com.example.dabh.controller.MVC;
+package com.example.dabh.controller.MVCTemplates;
 
 
 import com.example.dabh.model.Product;
@@ -7,12 +7,19 @@ import com.example.dabh.repository.IProductRepository;
 import com.example.dabh.service.ICartService;
 import com.example.dabh.service.ICategoryService;
 import com.example.dabh.service.IProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.http.HttpRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,14 +41,76 @@ public class TestMVCTemplate {
     @Autowired
     private ICartService cartService;
 
-    @RequestMapping("{id}")
+    @GetMapping("/update/{id}")
     public String showFormUpdateProduct(Model model , @PathVariable("id") int id){
-//        Optional<Product> productOptional = productService.findObjectById(id);
-//        model.addAttribute("product",productOptional.get());
-//        model.addAttribute("categoryList",categoryService.showAll());
-
+        Optional<Product> productOptional = productService.findObjectById(id);
+        model.addAttribute("product",productOptional.get());
+        model.addAttribute("categoryList",categoryService.showAll());
+        // Lấy danh sách ảnh
+            // Thêm đường dẫn ảnh vào danh sách
+            // Thêm tên ảnh vào danh sách
+        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
+        System.out.println(productOptional.get().getPicture());
+        model.addAttribute("imagePaths", productOptional.get().getPicture());
         return "tryWeb/doneTry/updateProduct";
     }
+    @PostMapping("/update/{name}/{password}")
+    public String updateProduct(@ModelAttribute ProductForm productForm,@PathVariable("name") String name,@PathVariable("password") String password ,@RequestParam("categoryId") int category){
+        productForm.setIdCategory(category);
+//
+        productService.update(productForm.getId(),productForm,name,password);
+        return "redirect:/test?status=update";
+    }
+    @GetMapping("")
+//    , @PageableDefault(7) Pageable pageable
+    public ModelAndView showProductList(HttpServletRequest httpRequest) {
+        String status = httpRequest.getParameter("status");
+        if(status.equals("")){
+            status= "no";
+        }
+        // Lấy trang sản phẩm từ service
+        ModelAndView modelAndView = new ModelAndView("tryWeb/doneTry/ListProduct");
+//        Page<Product> productsPage = productService.findAll(pageable);
+        List<Product> productsPage = (List<Product>) productService.showAll();
+        modelAndView.addObject("productsPage", productsPage);
+        modelAndView.addObject("status",status);
+//        // Lấy danh sách ảnh
+//        List<String> imagePaths = new ArrayList<>();
+//        List<String> imageNames = new ArrayList<>();
+//        for (Product product : productsPage.getContent()) {
+//            // Thêm đường dẫn ảnh vào danh sách
+//            imagePaths.add(product.getPicture());
+//            // Thêm tên ảnh vào danh sách
+//            imageNames.add(product.getPicture());
+//        }
+//        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
+//        model.addAttribute("imagePaths", imagePaths);
+//        model.addAttribute("imageNames", imageNames);
+
+        return modelAndView;
+    }
+    @GetMapping("/create")
+    public String showFormCreateProduct(Model model){
+        model.addAttribute("product",new ProductForm());
+        model.addAttribute("categoryList",categoryService.showAll());
+        return "tryWeb/doneTry/createProduct";
+    }
+    @PostMapping("/add/{name}/{password}")
+    public String createProduct(Model model,@ModelAttribute ProductForm productForm , @PathVariable("name") String name , @PathVariable("password") String password ){
+        productService.save(productForm,name,password,productForm.getIdCategory());
+        return "redirect:/test?status=create";
+    }
+    @GetMapping("/delete/{id}/{name}/{password}")
+    public String showFormDelete( @PathVariable("id") int id, @PathVariable("name") String name , @PathVariable("password") String password){
+        Optional<Product> productOptional = productService.findObjectById(id);
+        productService.delete(productOptional.get().getId(),name,password);
+        return "redirect:/test?status=delete";
+
+    }
+//    @PostMapping("/delete/{name}/{password}")
+//    public String deleteProduct(@ModelAttribute Product product , @PathVariable("name") String name , @PathVariable("password") String password){
+//
+//    }
 
 //    @GetMapping("{id}")
 //    public String showProductList(Model model, @PageableDefault(6) Pageable pageable, @PathVariable("id") int idCustomer) {
@@ -109,29 +178,7 @@ public class TestMVCTemplate {
 
 //    PRODUCTS CRUD
 //, @PageableDefault(2) Pageable pageable
-    @GetMapping("")
-    public ModelAndView showProductList(@RequestParam("status") String status) {
-        // Lấy trang sản phẩm từ service
-        ModelAndView modelAndView = new ModelAndView("tryWeb/doneTry/ListProduct");
-//        Page<Product> productsPage = productService.findAll(pageable);
-//        List<Product> productsPage = (List<Product>) productService.showAll();
-//        modelAndView.addObject("productsPage", productsPage);
-//
-//        // Lấy danh sách ảnh
-//        List<String> imagePaths = new ArrayList<>();
-//        List<String> imageNames = new ArrayList<>();
-//        for (Product product : productsPage.getContent()) {
-//            // Thêm đường dẫn ảnh vào danh sách
-//            imagePaths.add(product.getPicture());
-//            // Thêm tên ảnh vào danh sách
-//            imageNames.add(product.getPicture());
-//        }
-//        // Thêm danh sách đường dẫn ảnh và tên ảnh vào model
-//        model.addAttribute("imagePaths", imagePaths);
-//        model.addAttribute("imageNames", imageNames);
 
-        return modelAndView;
-    }
     //    @GetMapping("/showASC")
 //    public String showProductListASC(Model model, @PageableDefault(6) Pageable pageable) {
 //        // Lấy trang sản phẩm từ service
@@ -174,28 +221,7 @@ public class TestMVCTemplate {
 //
 //        return "user/listCategoryAndProduct";
 //    }
-//    @GetMapping("/create")
-//    public String showFormCreateProduct(Model model){
-//        model.addAttribute("product",new ProductForm());
-//        model.addAttribute("categoryList",categoryService.showAll());
-//        return "tryWeb/doneTry/createProduct";
-//    }
-//    @PostMapping("/add/{name}/{password}")
-//    public String createProduct(Model model,@ModelAttribute ProductForm productForm , @PathVariable("name") String name , @PathVariable("password") String password ){
-//        productService.save(productForm,name,password,productForm.getIdCategory() );
-//        return "redirect:/test?status=ok";
-//    }
-//    @GetMapping("/delete/{id}/{name}/{password}")
-//    public String showFormDelete( @PathVariable("id") int id, @PathVariable("name") String name , @PathVariable("password") String password){
-//        Optional<Product> productOptional = productService.findObjectById(id);
-//        productService.delete(productOptional.get().getId(),name,password);
-//        return "redirect:/test";
 //
-//    }
-//    @PostMapping("/delete/{name}/{password}")
-//    public String deleteProduct(@ModelAttribute Product product , @PathVariable("name") String name , @PathVariable("password") String password){
-//
-//    }
 
 //    @PostMapping("/update/{name}/{password}")
 //    public String updateProduct(@ModelAttribute ProductForm productForm,@PathVariable("name") String name,@PathVariable("password") String password , RedirectAttributes redirectAttributes){
